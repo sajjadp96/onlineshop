@@ -27,6 +27,7 @@ class OrderItem(BaseModel):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     quantity = models.IntegerField()
+    price = models.IntegerField()
     
 
     def __str__(self) -> str:
