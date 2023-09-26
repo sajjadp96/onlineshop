@@ -13,7 +13,7 @@ class Category(BaseModel):
     title = models.CharField(max_length=30, unique=True)
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='images/categories/', null=True)
-    category = models.ForeignKey('self')
+    category = models.ForeignKey('self',on_delete=models.CASCADE,related_name='categorychild')
 
     def __str__(self) -> str:
         return self.title
@@ -24,7 +24,7 @@ class Product(BaseModel):
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='images/foods/', null=True)
     price = models.DecimalField(decimal_places=2, max_digits=5)
-    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT,related_name='productcategory')
     status = models.BooleanField(default=True)
 
     def __str__(self) -> str:
