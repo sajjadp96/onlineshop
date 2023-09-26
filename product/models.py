@@ -13,6 +13,7 @@ class Category(BaseModel):
     title = models.CharField(max_length=30, unique=True)
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='images/categories/', null=True)
+    category = models.ForeignKey('self')
 
     def __str__(self) -> str:
         return self.title
