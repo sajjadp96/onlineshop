@@ -12,8 +12,8 @@ class BaseModel(models.Model):
 class Category(BaseModel):
     title = models.CharField(max_length=30, unique=True)
     description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='images/categories/', null=True)
-    category = models.ForeignKey('self',on_delete=models.CASCADE,related_name='categorychild')
+    image = models.ImageField(upload_to='images/categories/',blank=True,null=True)
+    category = models.ForeignKey('self',on_delete=models.CASCADE,related_name='categorychild',blank=True,null=True)
 
     def __str__(self) -> str:
         return self.title
@@ -22,10 +22,10 @@ class Category(BaseModel):
 class Product(BaseModel):
     name = models.CharField(max_length=50, unique=True)
     description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='images/foods/', null=True)
+    image = models.ImageField(upload_to='images/foods/', null=True,blank=True)
     price = models.DecimalField(decimal_places=2, max_digits=5)
     category = models.ForeignKey(Category, on_delete=models.PROTECT,related_name='productcategory')
     status = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        return self.title
+        return self.name
