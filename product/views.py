@@ -22,3 +22,11 @@ class ProductList(APIView):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
+    
+
+class SearchView(APIView):
+    def get(self, request):
+        searched = request.GET.get('searched')
+        FOODS_QUERYSET = Product.objects.filter(name__contains=searched).distinct()
+        serializer = ProductSerializer(FOODS_QUERYSET,many=True)
+        return Response(serializer.data)
