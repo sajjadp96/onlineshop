@@ -23,7 +23,7 @@ class Order(BaseModel):
 
     @property
     def price(self):
-        total = sum([item.price*item.quantity for item in self.items.all()])
+        total = sum([(item.price*item.quantity)/100*item.discount for item in self.items.all()])
         return total
 
     @property
