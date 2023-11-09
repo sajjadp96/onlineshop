@@ -24,6 +24,7 @@ class Product(BaseModel):
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='images/foods/', null=True,blank=True)
     price = models.DecimalField(decimal_places=2, max_digits=5)
+    discount = models.DecimalField(decimal_places=1, max_digits=3, default=0.0)
     category = models.ForeignKey(Category, on_delete=models.PROTECT,related_name='productcategory')
     status = models.BooleanField(default=True)
 
