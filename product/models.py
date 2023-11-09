@@ -22,7 +22,7 @@ class Category(BaseModel):
 class Product(BaseModel):
     name = models.CharField(max_length=50, unique=True)
     description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='images/foods/', null=True,blank=True)
+    image = models.ImageField(upload_to='images/products', null=True,blank=True)
     price = models.DecimalField(decimal_places=2, max_digits=5)
     discount = models.DecimalField(decimal_places=1, max_digits=3, default=0.0)
     category = models.ForeignKey(Category, on_delete=models.PROTECT,related_name='productcategory')
