@@ -10,6 +10,7 @@ from django.db import transaction
 from product.models import Product
 from user.models import User
 from user.tasks import send_notification_mail
+from django.core.exceptions import ObjectDoesNotExist
 # from user.utils import get_all_users_email,ad_message
 
 
@@ -22,9 +23,12 @@ class AddOrderView(APIView):
         
         user = request.user
         ser_data = PrudoctSerializer(data=request.data)
-        address = Address.objects.get(user=user)
+        try:
+            address = Address.objects.get(user=user)
+        except ObjectDoesNotExist:
+            return Response({"detial":"add address first."},status=status.HTTP_400_BAD_REQUEST)
         order = Order(customer=user,address = address)
-
+        
         if ser_data.is_valid():
             
             serialized_data = ser_data.data['orders']
@@ -108,13 +112,18 @@ class OrderDetailsView(APIView):
         user = request.user
         
         if ser_data.is_valid():
+            
             serialized_data = ser_data.data['orders']
             
             try:
-                orderitem = OrderItem.objects.filter(order_id=pk,order__customer_id=6) 
+                
+                orderitem = OrderItem.objects.filter(order_id=pk,order__customer_id=user.id)
+                 
                 for key,value in serialized_data.items():
-                    if orderitem.filter(product_id=key):
-                        orderitem.update(order_id=pk,product_id=key,quantity=value)
+                    
+                    if  len(order_i := orderitem.filter(product=key))>0:
+                        order_i.update(quantity=value)
+                        
                     else:
                         product = Product.objects.get(id=key)
                         orderitem.create(order_id=pk,product=product,quantity=value,price=product.price,discount=product.discount)
